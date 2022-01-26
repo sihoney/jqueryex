@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Insert title here</title>
+	</head>
+	<body>
+		<h2>Java Script</h2>
+		
+		<form class="js-form">
+			<input type="text" name="name" value="">
+			<button type="submit">click</button>		
+		</form>
+		
+		<ul class="js-list"></ul>
+		
+		
+		<script type="text/javascript">
+			const form = document.querySelector(".js-form");
+			const input = document.querySelector("input");
+			const ul = document.querySelector(".js-list");
+			
+			const LIS = "lis"; 
+			let lis = [];
+			
+			function saveArray() {
+				localStorage.setItem(LIS, JSON.stringify(lis));
+			}
+			
+			function handleDelete(e) {
+				e.preventDefault();
+				const target = e.path[1];
+				const targetId = +e.path[1].id; // string -> int
+				
+				// 화면에서 지우기
+				target.remove();
+				
+				// array에서 지우기
+				const filteredLis = lis.filter(li => li.id !== targetId);
+				lis = filteredLis
+				saveArray(); 
+			}
+			
+			function paintValue(text) {
+				const li = document.createElement("li");
+				const delBtn = document.createElement("button");
+				const span = document.createElement("span");
+				const newId = lis.length + 1;
+				
+				span.innerText = text;
+				delBtn.innerText = "❌";
+				delBtn.addEventListener("click", handleDelete);
+				
+				li.appendChild(span);
+				li.appendChild(delBtn);
+				li.id = newId;
+				ul.appendChild(li);
+				
+				const liObj = {
+						text: text,
+						id: newId
+				}
+				
+				lis.push(liObj);
+				saveArray();
+			}
+			
+			function handleSubmit(e) {
+				e.preventDefault();
+				paintValue(input.value);
+				input.value = "";
+			}
+			
+			function loadLocalStorage() {
+				const loadedLis = localStorage.getItem(LIS);
+				
+				if(loadedLis !== null) {
+					const parsedLis = JSON.parse(loadedLis);
+					parsedLis.forEach(li => paintValue(li.text));
+				}
+			}
+			
+			function init() {
+				loadLocalStorage();
+				form.addEventListener("submit", handleSubmit);
+			}
+			
+			init();
+		</script>
+	</body>
+</html>
