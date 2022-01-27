@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JQuery</title>
+</head>
+<body>
+	<button id="btn">button</button>
+	<h1 id="display"></h1>
+    
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+   <script>
+   		$("#btn").on("click", (e) => {
+   			e.preventDefault();
+   			
+   			$("#display").html(`<font color="red">hello world</font>`);
+   		});
+   </script>
+</body>
+</html>
